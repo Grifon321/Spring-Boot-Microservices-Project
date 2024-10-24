@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks Directory</title>
+    <link rel="stylesheet" href="ContentStyle.css">
+</head>
+<body>
+    <div class="header-div">
+        <div class="showall-container">
+            <form action="/content" method="get">
+                <button type="submit">Show all</button>
+            </form>
+        </div>
+    
+        <div class="logout-div">
+            <div class="logout-container">
+                <form action="/logout" method="post">
+                    <button type="submit">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="searchbar-div">
+        <div class="search-container">
+            <form action="/search" method="post">
+                <input type="search-text" id="query" name="query" placeholder="Search..." required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+    
+
+    <div class="tasks-div">
+        <div class="addNewTask-container">
+            <button type="button" onclick="addNewTask()">Add new task</button>
+        </div>
+    
+        <div class="edit-task-div">
+            <div class="editTask-container">
+                <button type="button" onclick="editTask()">Edit task</button>
+            </div>
+        </div>
+        <div class="delete-task-div">
+            <div class="deleteTask-container">
+                <button type="button" onclick="deleteTask()">Delete task</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="new-task-container" class="common-container"></div>
+    <div id="edit-task-container" class="common-container"></div>
+    <div id="delete-task-container" class="common-container"></div>
+    
+    <div id="content-boxes" class="common-container">
+        <ul>
+            <li th:each="content : ${contents}" class="content-item">
+                <div class="content-column id">
+                    <label>ID:</label>
+                    <input type="text" th:value="${content.id}" placeholder="ID..." readonly/>
+                </div>
+                <div class="content-column name">
+                    <label>Name:</label>
+                    <input type="text" th:value="${content.name}" placeholder="Name..." />
+                </div>
+                <div class="content-column text">
+                    <label>Text:</label>
+                    <textarea th:text="${content.text}" placeholder="Text..."></textarea>
+                </div>
+                <div class="content-column deadline">
+                    <label>Deadline:</label>
+                    <input type="text" th:value="${content.deadline}" placeholder="Deadline..." />
+                </div>
+            </li>
+        </ul>
+    </div>
+    <script>
+        let isAddFormVisible = false; // State variable to track form visibility
+        let isEditFormVisible = false; // State variable to track form visibility
+        let isDeleteFormVisible = false; // State variable to track form visibility
+    
+        function addNewTask() {
+            const taskContainer = document.getElementById("new-task-container");
+    
+            // Check if the form already exists
+            let existingForm = taskContainer.querySelector("form");
+    
+            if (existingForm) {
+                // If the form exists, toggle visibility
+                if (isAddFormVisible) {
+                    existingForm.style.display = "none"; // Hide the form
+                } else {
+                    existingForm.style.display = "block"; // Show the form
+                }
+                isAddFormVisible = !isAddFormVisible; // Toggle the state
+            } else {
+                // Create and display the new form
+                taskContainer.innerHTML = `
+                    <form action="/createTask" method="post">
+                        <div>
+                            <label>Name:</label>
+                            <input type="text" name="name" placeholder="Task name..." required />
+                        </div>
+                        <div>
+                            <label>Text:</label>
+                            <textarea name="text" placeholder="Task text..." required></textarea>
+                        </div>
+                        <div>
+                            <label>Deadline:</label>
+                            <input type="text" name="deadline" placeholder="Task deadline..." />
+                        </div>
+                        <button type="submit">Submit New Task</button>
+                    </form>
+                `;
+                isAddFormVisible = true; // Set the state to visible
+            }
+        }
+
+        function editTask() {
+            const taskContainer = document.getElementById("edit-task-container");
+    
+            // Check if the form already exists
+            let existingForm = taskContainer.querySelector("form");
+    
+            if (existingForm) {
+                // If the form exists, toggle visibility
+                if (isAddFormVisible) {
+                    existingForm.style.display = "none"; // Hide the form
+                } else {
+                    existingForm.style.display = "block"; // Show the form
+                }
+                isAddFormVisible = !isAddFormVisible; // Toggle the state
+            } else {
+                // Create and display the new form
+                taskContainer.innerHTML = `
+                    <form action="/editTask" method="post">
+                        <div>
+                            <label>ID:</label>
+                            <input type="text" name="id" placeholder="ID..." required />
+                        </div>
+                        <div>
+                            <label>Name:</label>
+                            <input type="text" name="name" placeholder="Task name..." required />
+                        </div>
+                        <div>
+                            <label>Text:</label>
+                            <textarea name="text" placeholder="Task text..." required></textarea>
+                        </div>
+                        <div>
+                            <label>Deadline:</label>
+                            <input type="text" name="deadline" placeholder="Task deadline..."  />
+                        </div>
+                        <button type="submit">Submit New Task</button>
+                    </form>
+                `;
+                isAddFormVisible = true; // Set the state to visible
+            }
+        }
+        function deleteTask() {
+            const taskContainer = document.getElementById("delete-task-container");
+    
+            // Check if the form already exists
+            let existingForm = taskContainer.querySelector("form");
+    
+            if (existingForm) {
+                // If the form exists, toggle visibility
+                if (isAddFormVisible) {
+                    existingForm.style.display = "none"; // Hide the form
+                } else {
+                    existingForm.style.display = "block"; // Show the form
+                }
+                isAddFormVisible = !isAddFormVisible; // Toggle the state
+            } else {
+                // Create and display the new form
+                taskContainer.innerHTML = `
+                    <form action="/deleteTask" method="post">
+                        <div>
+                            <label>ID:</label>
+                            <input type="text" name="id" placeholder="ID..." required />
+                        </div>
+                        <button type="submit">Submit New Task</button>
+                    </form>
+                `;
+                isAddFormVisible = true; // Set the state to visible
+            }
+        }
+    </script>
+</body>
+</html>
