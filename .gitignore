@@ -1,0 +1,13 @@
+# Logs
+spring.log
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+
+# IntelliJ IDEA files
+.vscode
+
+# STS (Spring Tool Suite)
+spring-boot-devtools/
