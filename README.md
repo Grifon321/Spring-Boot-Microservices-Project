@@ -54,7 +54,11 @@ Make sure MAVEN is installed as well as docker client and then run docker :
 ```
 docker-compose up --build
 ```
-Docker does not include web and is unoptimized, be sure to double check if docker can allocate enough ressources.
+Docker does not include web. Web component has to be launched separately via :
+```
+cd web
+mvn spring-boot:run
+```
 ## Usage (via maven)
 Make sure MAVEN is installed as well as docker client. Alternatively, PostgreSQL, Kafka and Elasticsearch can be launched manually instead of creating docker image.
 ### 1. PostgreSQL, Kafka, Elasticsearch

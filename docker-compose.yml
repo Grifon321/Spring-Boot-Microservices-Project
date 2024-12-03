@@ -1,4 +1,26 @@
 services:
+  # Spring Boot applications (this is the service you previously had)
+  spring-apps:
+    build:
+      context: .
+      dockerfile: Single-Spring-Boot-Applications-Docker/Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
+
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+      - kafka
+      - zookeeper
+      - elasticsearch
+
+  # PostgreSQL
   postgres:
     image: postgres:14-alpine
     environment:
@@ -11,14 +33,16 @@ services:
       - "5432:5432"
     networks:
       - app-network
-      
+
+  # Zookeeper
   zookeeper:
     image: wurstmeister/zookeeper:latest
     ports:
       - "2181:2181"
     networks:
       - app-network
-      
+
+  # Kafka
   kafka:
     image: wurstmeister/kafka:latest
     volumes:
@@ -34,25 +58,28 @@ services:
     networks:
       - app-network
 
-  user-service:
-    build:
-      context: ./user-service
-      dockerfile: Dockerfile
+  # Elasticsearch
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=admin
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - network.host=0.0.0.0
     ports:
-      - "8082:8082"
+      - "9200:9200"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     networks:
       - app-network
-    depends_on:
-      - postgres
-
-volumes:
-  postgres_data:
-  kafka_data:
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  postgres_data:
+  kafka_data:
