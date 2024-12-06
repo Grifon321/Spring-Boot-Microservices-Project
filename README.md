@@ -22,6 +22,7 @@ This projects is a demonstration of a micro service architecture which provides 
 - Elasticsearch
 - Eureka
 - Docker
+- SAP UI5
 
 ## Dependencies
 * Core
@@ -44,7 +45,8 @@ This projects is a demonstration of a micro service architecture which provides 
 * Kafka
 * Elasticsearch
 * Lombok
-* Docker 
+* Docker
+* SAP UI5
 
 ## Installation
 - Make sure Apache Maven is installed on the machine to compile all the files and run `build.sh` or alternatively run `mvn clean install` in all of the maven project directories :
@@ -56,16 +58,26 @@ docker-compose up --build
 ```
 Docker does not include web. Web component has to be launched separately via :
 ```
-cd web
+cd web-backend
 mvn spring-boot:run
 ```
+for backend and 
+```
+cd web-frontend
+ui5 serve
+```
+for frontend. Website can be accessed via 
 ## Usage (via maven)
 Make sure MAVEN is installed as well as docker client. Alternatively, PostgreSQL, Kafka and Elasticsearch can be launched manually instead of creating docker image.
 ### 1. PostgreSQL, Kafka, Elasticsearch
+Make sure PostgreSQL is launched with following parameters on port 5432 with following parameters :
 ```
-cd PostgreSQL-Elastic-Kafa-docker
-docker-compose up
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
 ```
+Kafka as well as zookeeper have to be running on ports 9092 and 2181 accordingly.
+Elasticsearch has to be running on port 9200.
 ### 2. Eureka
 ```
 cd Eureka-Server
@@ -97,11 +109,17 @@ mvn spring-boot:run
 cd api-gateway
 mvn spring-boot:run
 ```
-### 8. web
+### 8. web-backend
 ```
-cd web
+cd web-backend
 mvn spring-boot:run
 ```
+### 9. web-frontend
+```
+cd web-frontend
+ui5 serve
+```
+The API-Gateway can be accessed on port 8082, the web can be accessed on port localhost:8080/login.html
 
 ## API Endpoints
 All the respective examples of the usage can be found in the README files of the respective projects.

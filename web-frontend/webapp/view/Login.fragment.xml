@@ -1,0 +1,11 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <VBox id="login" justifyContent="Center" alignItems="Center" fitContainer="true">
+        <items>
+            <Input id="usernameInput" placeholder="Enter your username" width="300px" />
+            <Input id="emailInput" placeholder="Enter your E-Mail" width="300px" />
+            <Input id="passwordInput" placeholder="Enter your password" type="Password" width="300px" />
+            <Button text="Login" press=".onLogin" width="300px" />
+            <Button text="Signup" press=".onSignup" width="300px" />
+        </items>
+    </VBox>
+</core:FragmentDefinition>

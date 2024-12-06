@@ -18,7 +18,7 @@ mvn clean install
 cd ../api-gateway || { echo "Failed to navigate to api-gateway directory"; exit 1; }
 mvn clean install
 
-cd ../web || { echo "Failed to navigate to web directory"; exit 1; }
+cd ../web-backend || { echo "Failed to navigate to web directory"; exit 1; }
 mvn clean install
 
 echo "Build process completed!"

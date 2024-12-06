@@ -1,0 +1,21 @@
+<mvc:View controllerName="com.example.ui5app.controller.App"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc">
+    <Shell>
+        <App id="app">
+            <pages>
+                <Page id="loginSignupPage" title="Login/Signup to your account">
+                    <content>
+                        <Panel class="sapUiResponsiveMargin" width="auto">
+                            <content>
+                                <core:Fragment fragmentName="com.example.ui5app.view.Login" type="XML" xmlns:core="sap.ui.core" />
+
+                                <core:Fragment fragmentName="com.example.ui5app.view.Body" type="XML" xmlns:core="sap.ui.core" />
+                            </content>
+                        </Panel>
+                    </content>
+                </Page>
+            </pages>
+        </App>
+    </Shell>
+</mvc:View>
