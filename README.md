@@ -66,7 +66,8 @@ for backend and
 cd web-frontend
 ui5 serve
 ```
-for frontend. Website can be accessed via 
+for frontend.
+The API-Gateway can be accessed on port 8082, the web can be accessed on port localhost:8080/login.html
 ## Usage (via maven)
 Make sure MAVEN is installed as well as docker client. Alternatively, PostgreSQL, Kafka and Elasticsearch can be launched manually instead of creating docker image.
 ### 1. PostgreSQL, Kafka, Elasticsearch
