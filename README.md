@@ -63,7 +63,7 @@ mvn spring-boot:run
 ```
 for backend and 
 ```
-cd web-frontend
+cd web-frontend/web
 ui5 serve
 ```
 for frontend.
@@ -117,7 +117,7 @@ mvn spring-boot:run
 ```
 ### 9. web-frontend
 ```
-cd web-frontend
+cd web-frontend/web
 ui5 serve
 ```
 The API-Gateway can be accessed on port 8082, the web can be accessed on port localhost:8080/login.html
