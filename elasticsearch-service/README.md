@@ -38,7 +38,43 @@ Make sure Elasticsearch and Kafka are running.
 - GET /elastic/search?query={query}: Retrieve a list of all tasks found by the elasticsearch query.
 - GET /elastic/{userId}/search?query={query}: Retrieve a list of all tasks found by the elasticsearch query which are associated with the userId.
 
-
+Query has to be written in the following format :
+```
+query=WORD1 WORD2 %7C%7C WORD3 WORD4
+```
+Spaces (or alternatively `%20`) are the AND delimeters, `%7C%7C` are the OR delimeters for the search.
+The exmaple query = description big%7C%7Csmall, userId = 2 is translated into following logic :
+```json
+{
+  "query": {
+    "bool": {
+      "should": [
+        {
+          "bool": {
+            "must": [
+              { "match": { "text": { "query": "description", "operator": "AND" } } },
+              { "match": { "text": { "query": "big", "operator": "AND" } } }
+            ]
+          }
+        },
+        {
+          "bool": {
+            "must": [
+              { "match": { "text": { "query": "small", "operator": "AND" } } }
+            ]
+          }
+        }
+      ],
+      "minimum_should_match": 1,
+      "filter": [
+        {
+          "term": { "userIds": 2 }
+        }
+      ]
+    }
+  }
+}
+```
 ## Examples
 ### GET /elastic/showAll
 ```
@@ -47,12 +83,12 @@ GET http://localhost:8085/elastic/showAll
 
 ### GET /elastic/search?query={query}
 ```
-GET http://localhost:8085/elastic/search?query=text
+GET http://localhost:8085/elastic/search?query=description big%7C%7Csmall
 ```
 
 ### GET /elastic/{userId}/search?query={query}
 ```
-GET http://localhost:8085/elastic/3/search?query=text
+GET http://localhost:8085/elastic/2/search?query=description big%7C%7Csmall
 ```
 
 

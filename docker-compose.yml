@@ -1,5 +1,5 @@
 services:
-  # Spring Boot applications (this is the service you previously had)
+  # Spring Boot applications
   spring-apps:
     build:
       context: .

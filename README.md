@@ -46,11 +46,11 @@ This projects is a demonstration of a micro service architecture which provides 
 * Elasticsearch
 * Lombok
 * Docker
-* SAP UI5
 
 ## Installation
 - Make sure Apache Maven is installed on the machine to compile all the files and run `build.sh` or alternatively run `mvn clean install` in all of the maven project directories :
-user-service/, authentication-service/, elasticsearch-service/, eureka-server/, task-service/, web/
+user-service/, authentication-service/, elasticsearch-service/, eureka-server/, task-service/, web-backend/
+- For web component make sure SAP UI5 is installed.
 ## Usage (via docker)
 Make sure MAVEN is installed as well as docker client and then run docker :
 ```
@@ -67,7 +67,7 @@ cd web-frontend/web
 ui5 serve
 ```
 for frontend.
-The API-Gateway can be accessed on port 8082, the web can be accessed on port localhost:8080/login.html
+The API-Gateway can be accessed on port 8081, the web can be accessed on port `localhost:8080/login.html`
 ## Usage (via maven)
 Make sure MAVEN is installed as well as docker client. Alternatively, PostgreSQL, Kafka and Elasticsearch can be launched manually instead of creating docker image.
 ### 1. PostgreSQL, Kafka, Elasticsearch
@@ -120,7 +120,7 @@ mvn spring-boot:run
 cd web-frontend/web
 ui5 serve
 ```
-The API-Gateway can be accessed on port 8082, the web can be accessed on port localhost:8080/login.html
+The API-Gateway can be accessed on port 8081, the web can be accessed on port `localhost:8080/login.html`
 
 ## API Endpoints
 All the respective examples of the usage can be found in the README files of the respective projects.
@@ -227,7 +227,6 @@ All the respective examples of the usage can be found in the README files of the
 </table>
 
 ### Elastic Search Service :
-
 <table style="width:100%">
   <tr>
       <th>Method</th>

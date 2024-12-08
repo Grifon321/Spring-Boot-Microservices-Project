@@ -26,6 +26,7 @@ public class ElasticController {
         return ResponseEntity.ok(tasks);
     }
 
+    // " "can be encoded with "%20", "||" has to be encoded with "%7C%7C"
     @GetMapping("/{userId}/search")
     public ResponseEntity<List<Task>> findByTextAndUserID(@RequestParam String query, @PathVariable Long userId) {
         List<Task> tasks = elasticService.findByTextAndUserID(query, userId);

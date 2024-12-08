@@ -19,6 +19,7 @@
                                         }" visible="false">
                 <headerToolbar>
                     <Toolbar>
+                            <Button text="Help" icon="sap-icon://question-mark" press=".onHelpPress" />
                         <SearchField id="searchField" search=".onSearch" placeholder="Search here..."/>
                     </Toolbar>
                 </headerToolbar>

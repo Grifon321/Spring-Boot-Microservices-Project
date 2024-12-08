@@ -228,6 +228,7 @@ sap.ui.define([
             
             var oSearchbar = this.byId("searchField");
             var query = oSearchbar.getValue();
+            var transformedQuery = query.replace(/\|\|/g, "%7C%7C");
 
             // Check if the username and authToken exist
             if (!username || !token) {
@@ -236,7 +237,7 @@ sap.ui.define([
             }
 
             // Retrieve data from the backend API using fetch()
-            fetch(`http://localhost:8089/api/search?username=${username}&token=${token}&query=${query}`, {
+            fetch(`http://localhost:8089/api/search?username=${username}&token=${token}&query=${transformedQuery}`, {
                 method: "GET"
             })
             .then(response => {
@@ -258,5 +259,8 @@ sap.ui.define([
             });
         },
 
+        onHelpPress: function () {
+            MessageToast.show('You can input AND and OR logic into the search via spacebar or || accordingly.');
+        }
     });
 });
