@@ -6,6 +6,7 @@ services:
       dockerfile: Single-Spring-Boot-Applications-Docker/Dockerfile
     ports:
       - "8081:8081"
+      - "8761:8761" # Eureka monitoring
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -66,6 +67,7 @@ services:
       - xpack.security.enabled=false
       - xpack.security.http.ssl.enabled=false
       - network.host=0.0.0.0
+      - ES_JAVA_OPTS=-Xms256m -Xmx1g #JVM Heap Size
     ports:
       - "9200:9200"
     healthcheck:
