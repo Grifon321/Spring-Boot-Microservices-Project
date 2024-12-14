@@ -22,6 +22,9 @@ public class Task {
 
     private String deadline;
 
+    // Should be only "To Do", "In Progress" or "Done". Pseudo enum
+    private String status; 
+    
     @ElementCollection
     @Column(name = "user-ids")
     private List<Long> userIds;

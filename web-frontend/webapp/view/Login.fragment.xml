@@ -1,4 +1,6 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
     <VBox id="login" justifyContent="Center" alignItems="Center" fitContainer="true">
         <items>
             <Input id="usernameInput" placeholder="Enter your username" width="300px" />

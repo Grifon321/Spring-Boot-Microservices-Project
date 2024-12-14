@@ -11,5 +11,6 @@ public class Task {
     private String name;
     private String text;
     private String deadline;
+    private String status; 
     private List<Long> userIds;
 }

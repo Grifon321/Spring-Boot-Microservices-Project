@@ -144,6 +144,7 @@ public class ElasticService {
                 task.setName((String) hit.getSourceAsMap().get("name"));
                 task.setText((String) hit.getSourceAsMap().get("text"));
                 task.setDeadline((String) hit.getSourceAsMap().get("deadline"));
+                task.setStatus((String) hit.getSourceAsMap().get("status"));
                 
                 // Even though it is indexed as List<Long>, still needs casting from List<Integer> to List<Long>
                 Object userIdsObject = hit.getSourceAsMap().get("userIds");

@@ -13,6 +13,10 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
+    public boolean verifyStatus(Task task) {
+        return task.getStatus().equals("To Do") || task.getStatus().equals("In Progress") || task.getStatus().equals("Done");
+    }    
+
     public Task registerTask(Task task) {
         return taskRepository.save(task);
     }
@@ -32,6 +36,7 @@ public class TaskService {
         task.setName(updatedTask.getName());
         task.setText(updatedTask.getText());
         task.setDeadline(updatedTask.getDeadline());
+        task.setStatus(updatedTask.getStatus());
         return taskRepository.save(task);
     }
 

@@ -30,8 +30,8 @@ Make sure Kafka and PostgreSQL are running.
 - PUT /tasks/{id}: Update the task by their ID.
 - GET /tasks/showAll: Retrieve a list of all users.
 - GET /tasks/{id}: Retrieve details of a task by their ID.
-- PUT /tasks/addUserId/{id}: Add the userID of a task with the ID.
-- PUT /tasks/removeUserId/{id}: Remove the userID of a task with the ID.
+- PUT /tasks/addUserId/{id}?userId={userId}: Add the userID of a task with the ID.
+- PUT /tasks/removeUserId/{id}?userId={userId}: Remove the userID of a task with the ID.
 - GET /tasks/user/{userId}: Retrieve all tasks associated with userID.
 
 ## Examples
@@ -72,21 +72,13 @@ GET http://localhost:8084/tasks/showAll
 ```
 GET http://localhost:8084/tasks/1
 ```
-### PUT /tasks/addUserId/{id}
+### PUT /tasks/addUserId/{id}?userId={userId}
 ```
-PUT http://localhost:8084/tasks/addUserId/1
+PUT http://localhost:8084/tasks/addUserId/1/2
 ```
-with the following JSON body :
+### PUT /tasks/removeUserId/{id}?userId={userId}
 ```
-2
-```
-### PUT /tasks/removeUserId/{id}
-```
-PUT http://localhost:8084/tasks/removeUserId/1
-```
-with the following JSON body :
-```
-2
+PUT http://localhost:8084/tasks/removeUserId/1?userId=2
 ```
 ### GET /tasks/user/{userId}
 ```

@@ -1,0 +1,134 @@
+<mvc:View controllerName="com.example.ui5app.controller.App"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc">
+    <VBox justifyContent="Center" alignItems="Center" fitContainer="true" width="100%">
+        <items>
+            <HBox>
+                <items>
+                    <Button id="addTaskButton" text="Add new task" press=".onOpenAddTaskDialog" width="200px" class="sapUiSmallMarginEnd"/>
+                </items>
+                <items>
+                    <Button text="Help" icon="sap-icon://question-mark" press=".onHelpPress"/>
+                </items>
+                <items>
+                    <SearchField id="searchField" search=".onSearch" placeholder="Search here..." class="sapUiSmallMarginEnd"/>
+                </items>
+
+            </HBox>
+
+            <HBox renderType="Bare">
+                <items>
+                    <Table  items="{ path: '/tasks', filters: { path: 'status', operator: 'EQ', value1: 'To Do' } }" >
+                        <contextMenu>
+                            <Menu>
+                                <MenuItem text="Show contents of task" press=".onShowTasksContext" />
+                                <MenuItem text="Delete the task" press=".onDeleteTask" />
+                                <MenuItem text="Edit the task" press=".onEditTask" />
+                                <MenuItem text="Manage users" press=".onUpdateUser" />
+                                <MenuItem text="Move to In Progress" press=".onMoveToInProgress" />
+                                <MenuItem text="Move to Done" press=".onMoveToDone" />
+                            </Menu>
+                        </contextMenu>
+                        <headerToolbar>
+                            <Toolbar>
+                                <Title text="To Do"/>
+                            </Toolbar>
+                        </headerToolbar>
+                        <columns>
+                            <Column width="6rem">
+                                <Text text="Name"/>
+                            </Column>
+                            <Column>
+                                <Text text="Text"/>
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{name}"/>
+                                    <Text text="{text}"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </items>
+                <items>
+                    <VBox justifyContent="Center" class="sapUiSmallMarginBeginEnd"/>
+                </items>
+                <items>
+                    <Table  items="{ path: '/tasks', filters: { path: 'status', operator: 'EQ', value1: 'In Progress' } }" >
+                        <contextMenu>
+                            <Menu>
+                                <MenuItem text="Show contents of task" press=".onShowTasksContext" />
+                                <MenuItem text="Delete the task" press=".onDeleteTask" />
+                                <MenuItem text="Edit the task" press=".onEditTask" />
+                                <MenuItem text="Manage users" press=".onUpdateUser" />
+                                <MenuItem text="Move to To Do" press=".onMoveToToDo" />
+                                <MenuItem text="Move to Done" press=".onMoveToDone" />
+                            </Menu>
+                        </contextMenu>
+                        <headerToolbar>
+                            <Toolbar>
+                                <Title text="In Progress"/>
+                            </Toolbar>
+                        </headerToolbar>
+                        <columns>
+                            <Column width="6rem">
+                                <Text text="Name"/>
+                            </Column>
+                            <Column>
+                                <Text text="Text"/>
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{name}"/>
+                                    <Text text="{text}"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </items>
+                <items>
+                    <VBox justifyContent="Center" class="sapUiSmallMarginBeginEnd"/>
+                </items>
+                <items>
+                    <Table  items="{ path: '/tasks', filters: { path: 'status', operator: 'EQ', value1: 'Done' } }" >
+                        <contextMenu>
+                            <Menu>
+                                <MenuItem text="Show contents of task" press=".onShowTasksContext" />
+                                <MenuItem text="Delete the task" press=".onDeleteTask" />
+                                <MenuItem text="Edit the task" press=".onEditTask" />
+                                <MenuItem text="Manage users" press=".onUpdateUser" />
+                                <MenuItem text="Move to To Do" press=".onMoveToToDo" />
+                                <MenuItem text="Move to In Progress" press=".onMoveToInProgress" />
+                            </Menu>
+                        </contextMenu>
+                        <headerToolbar>
+                            <Toolbar>
+                                <Title text="Done"/>
+                            </Toolbar>
+                        </headerToolbar>
+                        <columns>
+                            <Column width="6rem">
+                                <Text text="Name"/>
+                            </Column>
+                            <Column>
+                                <Text text="Text"/>
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{name}"/>
+                                    <Text text="{text}"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </items>
+            </HBox>
+        </items>
+    </VBox>
+</mvc:View>

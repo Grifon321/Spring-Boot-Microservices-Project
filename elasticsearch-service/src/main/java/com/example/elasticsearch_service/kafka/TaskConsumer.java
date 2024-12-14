@@ -32,7 +32,6 @@ public class TaskConsumer {
                     System.out.println("Task created in Elasticsearch: " + messageJSON);
                     break;
                 case "UPDATE":
-                    elasticRepository.deleteById(task.getId());
                     elasticRepository.save(task);
                     System.out.println("Task updated in Elasticsearch: " + messageJSON);
                     break;

@@ -6,12 +6,12 @@ This projects is a demonstration of a micro service architecture which provides 
 ## Table of Contents
 - [Stack](#stack)
 - [Dependencies](#dependencies)
+- [Web component](#web-component)
+- [API Endpoints](#api-endpoints)
+- [Examples](#examples)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Usage for development](#usage-for-development)
-- [API Endpoints](#api-endpoints)
-- [Examples](#examples)
-- [Web component](#web-component)
 
 ## Stack
 - Maven
@@ -47,80 +47,9 @@ This projects is a demonstration of a micro service architecture which provides 
 * Lombok
 * Docker
 
-## Installation
-- Make sure Apache Maven is installed on the machine to compile all the files and run `build.sh` or alternatively run `mvn clean install` in all of the maven project directories :
-user-service/, authentication-service/, elasticsearch-service/, eureka-server/, task-service/, web-backend/
-- For web component make sure SAP UI5 is installed.
-## Usage (via docker)
-Make sure MAVEN is installed as well as docker client and then run docker :
-```
-docker-compose up --build
-```
-Docker does not include web. Web component has to be launched separately via :
-```
-cd web-backend
-mvn spring-boot:run
-```
-for backend and 
-```
-cd web-frontend/web
-ui5 serve
-```
-for frontend.
-The API-Gateway can be accessed on port 8081, the web can be accessed on port `localhost:8080/login.html`
-## Usage (via maven)
-Make sure MAVEN is installed as well as docker client. Alternatively, PostgreSQL, Kafka and Elasticsearch can be launched manually instead of creating docker image.
-### 1. PostgreSQL, Kafka, Elasticsearch
-Make sure PostgreSQL is launched with following parameters on port 5432 with following parameters :
-```
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-```
-Kafka as well as zookeeper have to be running on ports 9092 and 2181 accordingly.
-Elasticsearch has to be running on port 9200.
-### 2. Eureka
-```
-cd Eureka-Server
-mvn spring-boot:run
-```
-### 3. user-service
-```
-cd user-service
-mvn spring-boot:run
-```
-### 4. authentication-service
-```
-cd authentication-service
-mvn spring-boot:run
-```
-### 5. task-service
-```
-cd task-service
-mvn spring-boot:run
-```
-### 6. elasticsearch-service
-Make sure elastic search is running via sending POST request to `http://localhost:9200` before launching elasticsearch-service
-```
-cd elasticsearch-service
-mvn spring-boot:run
-```
-### 7. api-gateway
-```
-cd api-gateway
-mvn spring-boot:run
-```
-### 8. web-backend
-```
-cd web-backend
-mvn spring-boot:run
-```
-### 9. web-frontend
-```
-cd web-frontend/web
-ui5 serve
-```
-The API-Gateway can be accessed on port 8081, the web can be accessed on port `localhost:8080/login.html`
+### Web component
+The functionality of the website can be demonstrated with the following gif :
+![Authentication](README-images/Web%20demonstration.gif)
 
 ## API Endpoints
 All the respective examples of the usage can be found in the README files of the respective projects.
@@ -211,12 +140,12 @@ All the respective examples of the usage can be found in the README files of the
   </tr>
   <tr>
       <td>PUT</td>
-      <td>/tasks/addUserId/{id}</td>
+      <td>/tasks/addUserId/{id}?userId={userId}</td>
       <td>Add the userID to the task with {id}</td>
   </tr>
   <tr>
       <td>PUT</td>
-      <td>/tasks/removeUserId/{id}</td>
+      <td>/tasks/removeUserId/{id}?userId={userId}</td>
       <td>Remove the userID to the task with {id}</td>
   </tr>
   <tr>
@@ -299,6 +228,41 @@ As the responce we get a confirmation as a Task Object in JSON:
 
 ![Authentication](README-images/Task%20creation%202.png)
 
-### Web component
-The functionality of the website can be demonstrated with the following gif :
-![Authentication](README-images/Web%20demonstration.gif)
+## Installation
+- Make sure Apache Maven is installed on the machine to compile all the files and via `mvn clean install` in all of the maven project directories :
+user-service/, authentication-service/, elasticsearch-service/, eureka-server/, task-service/, web-backend/, api-gateway/
+- For web component make sure SAP UI5 with minimal version of 1.60 is installed.
+## Usage (via docker)
+Make sure MAVEN is installed as well as docker client and then run docker :
+```
+docker-compose up --build
+```
+Docker does not include web. Web component has to be launched separately via :
+```
+cd web-backend
+mvn spring-boot:run
+```
+for backend and 
+```
+cd web-frontend/web
+ui5 serve
+```
+for frontend.
+The API-Gateway can be accessed on port 8081, the web can be accessed on port `localhost:8080/login.html`
+## Usage (via maven)
+Make sure MAVEN is installed as well as docker client. Alternatively, PostgreSQL, Kafka and Elasticsearch can be launched manually instead of creating docker image.
+### 1. PostgreSQL, Kafka, Elasticsearch
+Make sure PostgreSQL is launched with following parameters on port 5432 with following parameters :
+```
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+```
+Kafka as well as zookeeper have to be running on ports 9092 and 2181 accordingly.
+Elasticsearch has to be running on port 9200.
+### 2. Services
+- Make sure `mvn clean install` has been executed in all of the maven project directories and start each of the services via `mvn spring-boot:run`:
+user-service/, authentication-service/, elasticsearch-service/, eureka-server/, task-service/, web-backend/, api-gateway/
+- For elasticsearch-service make sure elastic search is running via sending POST request to `http://localhost:9200` before launching elasticsearch-service.
+- For web component launch it with `ui5 serve` from web-frontend/web/
+The API-Gateway can be accessed on port 8081, the web can be accessed on port `localhost:8080/login.html`

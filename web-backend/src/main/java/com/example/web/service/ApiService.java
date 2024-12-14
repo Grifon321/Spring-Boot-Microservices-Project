@@ -25,6 +25,7 @@ public class ApiService {
     public ApiService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
+
     public String signup(String username, String password, String email) {
         String url = apiGatewayUrl + "/users/register";
         String requestPayload = "{\"username\":\"" + username + "\",\"password\":\"" + password + "\",\"email\":\"" + email + "\"}";
@@ -63,7 +64,6 @@ public class ApiService {
         User user = restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<User>() {}).getBody();
         return user.id;
     }
- 
     
     public List<Task> getAllTasksByUsername(String token, String username) {
         Long userId = getUserId(token, username);
@@ -85,9 +85,9 @@ public class ApiService {
         return restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<List<Task>>() {}).getBody();
     }
 
-    public void createNewTask(String token, String username, String name, String text, String deadline) {
+    public void createNewTask(String token, String username, String name, String text, String deadline, String status) {
         Long userId = getUserId(token, username);
-        String requestPayload = "{\"name\":\"" + name + "\",\"text\":\"" + text + "\",\"deadline\":\"" + deadline +  "\",\"userIds\":[" + userId +"]}";
+        String requestPayload = "{\"name\":\"" + name + "\",\"text\":\"" + text + "\",\"deadline\":\"" + deadline + "\",\"status\":\"" + status +  "\",\"userIds\":[" + userId +"]}";
 
         String url = apiGatewayUrl + "/tasks/register";
         HttpHeaders headers = new HttpHeaders();
@@ -98,9 +98,17 @@ public class ApiService {
         restTemplate.postForObject(url, entity, String.class);
     }
 
-    public void editTask(String id, String token, String username, String name, String text, String deadline) {
-        Long userId = getUserId(token, username);
-        String requestPayload = "{\"name\":\"" + name + "\",\"text\":\"" + text + "\",\"deadline\":\"" + deadline +  "\",\"userIds\":[" + userId +"]}";
+    public void editTask(String token, Long id, String name, String text, String deadline, String status, List<Long> userIds) {
+        StringBuilder userIdsStringBuilder = new StringBuilder("[");
+        for (int i = 0; i < userIds.size(); i++) {
+            userIdsStringBuilder.append(userIds.get(i));
+            if (i < userIds.size() - 1) {
+                userIdsStringBuilder.append(",");
+            }
+        }
+        userIdsStringBuilder.append("]");
+
+        String requestPayload = "{\"name\":\"" + name + "\",\"text\":\"" + text + "\",\"deadline\":\"" + deadline + "\",\"status\":\"" + status + "\",\"userIds\":" + userIdsStringBuilder.toString() + "}";
 
         String url = apiGatewayUrl + "/tasks/" + id;
         HttpHeaders headers = new HttpHeaders();
@@ -118,6 +126,22 @@ public class ApiService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
         restTemplate.exchange(url, HttpMethod.DELETE, entity, new ParameterizedTypeReference<Task>() {});
     }
-}
 
-    
+    public void addUserId(Long id, Long userId, String token) {
+        String url = apiGatewayUrl + "/tasks/addUserId/" + id + "?userId=" + userId;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        restTemplate.exchange(url, HttpMethod.PUT, entity, new ParameterizedTypeReference<Task>() {});
+    }
+
+    public void removeUserId(Long id, Long userId, String token) {
+        String url = apiGatewayUrl + "/tasks/removeUserId/" + id + "?userId=" + userId;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        restTemplate.exchange(url, HttpMethod.PUT, entity, new ParameterizedTypeReference<Task>() {});
+    }
+}

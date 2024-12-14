@@ -7,5 +7,6 @@ public class Task {
     public String name;
     public String text;
     public String deadline;
-    private List<Long> userIds;
+    public String status; 
+    public List<Long> userIds;
 }

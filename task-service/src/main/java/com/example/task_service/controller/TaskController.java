@@ -1,6 +1,7 @@
 package com.example.task_service.controller;
 
 import com.example.task_service.kafka.TaskProducer;
+import com.example.task_service.model.BadRequestException;
 import com.example.task_service.model.Task;
 import com.example.task_service.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class TaskController {
 
     @PostMapping("/register")
     public ResponseEntity<Task> registerTask(@RequestBody Task task) {
+        if (!taskService.verifyStatus(task))
+            throw new BadRequestException("Status has to be \"To Do\", \"In Progress\" or \"Done\"");
         Task savedTask = taskService.registerTask(task);
         taskProducer.sendTask(savedTask);
         return ResponseEntity.ok(savedTask);
@@ -40,17 +43,20 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
-        taskProducer.updateTask(task);
-        return ResponseEntity.ok(taskService.updateTask(id, task));
+        if (!taskService.verifyStatus(task))
+            throw new BadRequestException("Status has to be \"To Do\", \"In Progress\" or \"Done\"");
+        Task newTask = taskService.updateTask(id, task);
+        taskProducer.updateTask(newTask);
+        return ResponseEntity.ok(newTask);
     }
 
     @PutMapping("/addUserId/{id}")
-    public ResponseEntity<Task> addUserID(@PathVariable Long id, @RequestBody Long userId) {
+    public ResponseEntity<Task> addUserID(@PathVariable Long id, @RequestParam Long userId) {
         return ResponseEntity.ok(taskService.addUserID(id, userId));
     }
 
     @PutMapping("/removeUserId/{id}")
-    public ResponseEntity<Task> deleteUserID(@PathVariable Long id, @RequestBody Long userId) {
+    public ResponseEntity<Task> deleteUserID(@PathVariable Long id, @RequestParam Long userId) {
         return ResponseEntity.ok(taskService.deleteUserID(id, userId));
     }
 
