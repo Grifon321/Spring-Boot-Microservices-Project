@@ -46,7 +46,7 @@ public class ElasticService {
     
 
     public void fetchAndIndexTasks() {
-        String showAllUrl = tasksServiceAdress + "/showAll";
+        String showAllUrl = tasksServiceAdress;
         // Fetch tasks from the external API
         Task[] tasks = restTemplate.getForObject(showAllUrl, Task[].class);
         if (tasks != null) {

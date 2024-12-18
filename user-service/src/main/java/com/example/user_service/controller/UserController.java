@@ -3,9 +3,12 @@ package com.example.user_service.controller;
 import com.example.user_service.model.User;
 import com.example.user_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -15,28 +18,79 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/register")
+    @PostMapping
     public ResponseEntity<User> registerUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.registerUser(user));
+        // Register the user
+        User createdUser = userService.registerUser(user);
+
+        // Send 201 responce with user's location
+         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdUser.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(createdUser);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        // Delete the user or send 404 responce if no user with the id
+        User user = userService.getUserById(id);
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        userService.deleteUserById(id);
+        
+        // Send 204 responce
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}") // ToDo : Security flaw
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        // Get the user or send 404 responce if no user with the id
+        User user = userService.getUserById(id);
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+
+        // Send 200 responce with user in body
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        return ResponseEntity.ok(userService.updateUser(id, user));
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User newUser) {
+        // Update the user or send 404 responce if no user with the id
+        User user = userService.getUserById(id);
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        user = userService.updateUser(id, newUser);
+
+        // Send 200 responce with user in body
+        return ResponseEntity.ok(user);
     }
 
-    @GetMapping("username/{username}")
-    public ResponseEntity<User> getPasswordByUser(@PathVariable String username) {
-        return ResponseEntity.ok(userService.getUserByUsername(username));
+    @GetMapping("/password/{username}") // ToDo : Security flaw
+    public ResponseEntity<String> getPasswordByUser(@PathVariable String username) {
+        // Get the user and extract password
+        User user = userService.getUserByUsername(username);
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        String password = user.getPassword();
+        // Send 200 responce with password in body
+        return ResponseEntity.ok(password);
     }
 
-    @GetMapping("/showAll")
-    public ResponseEntity<List<User>> getAllUsers() {
+    @GetMapping("/id-by-username/{username}")
+    public ResponseEntity<?> getIdByUsername(@PathVariable String username) {
+        // Get the user and extract the id
+        User user = userService.getUserByUsername(username);
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        Long id = user.getId();
+        // Send 200 responce with password in body
+        return ResponseEntity.ok(id);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() { // ToDo : Security flaw since passwords are included
+        // Send 200 responce with a list of users in body
         return ResponseEntity.ok(userService.getAllUsers());
     }
 }

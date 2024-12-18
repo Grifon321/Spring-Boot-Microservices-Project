@@ -86,9 +86,8 @@ public class JwtAuthenticationFilter implements GlobalFilter {
         if (newUri == null) {
             return onError(exchange, "URI could not be resolved");
         }
-        
-        // Skip JWT validation for /auth/** routes and /users/register
-        if (path.startsWith("/auth") ||path.startsWith("/users/register")) {
+        // Skip JWT validation for /auth/** routes and registration of new user
+        if (path.startsWith("/auth") || (path.equals("/users") && exchange.getRequest().getMethod() == HttpMethod.POST)) {
             return chain.filter(exchange);
         }
 
@@ -107,15 +106,14 @@ public class JwtAuthenticationFilter implements GlobalFilter {
 
         HttpHeaders headersNew = new HttpHeaders();
         headersNew.set("AUTHORIZATION", "Bearer " + token);
-        String authUri = getUri(authenticationServicePath) + authenticationServicePath + "validate";
+        String authUri = getUri(authenticationServicePath) + authenticationServicePath + "/validate";
         // Call the authentication service to validate the token
         ResponseEntity<Boolean> responseEntity = restTemplate.exchange(
                 authUri,
-                HttpMethod.POST,
+                HttpMethod.GET,
                 new HttpEntity<>(token, headersNew),
                 Boolean.class);
-
-        if (responseEntity.getBody() != null && responseEntity.getBody()) {
+        if (responseEntity.getBody() != null && Boolean.TRUE.equals(responseEntity.getBody())) {
             return chain.filter(exchange); // Continue with the request if valid
         } else {
             return onError(exchange, "Invalid token");

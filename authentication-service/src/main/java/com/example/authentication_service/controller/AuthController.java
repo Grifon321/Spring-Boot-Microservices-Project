@@ -33,7 +33,7 @@ public class AuthController {
     }
 
     
-    @PostMapping("/validate")
+    @GetMapping("/validate")
     public ResponseEntity<Boolean> validateToken(HttpServletRequest request) {
         
         String bearerToken = request.getHeader("Authorization");
@@ -43,17 +43,26 @@ public class AuthController {
         // Check if the Authorization header contains a bearer token
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             token = bearerToken.substring(7); // Extract the token without 'Bearer '
-            username = jwtTokenUtil.extractUsername(token);
+            // username = jwtTokenUtil.extractUsername(token);
         }
 
         // Validate token
-        if (token != null && username != null) {
+        if (authService.validateToken(token)) {
+            return ResponseEntity.ok(true);
+        }
+        /*
+        if (token != null && username != null && !jwtTokenUtil.isTokenExpired(token)) {
+            return ResponseEntity.ok(true);  // Token is valid
+            
             String userServiceUrlWithUsername = jwtConfig.getUserServiceAdress() + username;
-            UserDTO userDTO = restTemplate.getForObject(userServiceUrlWithUsername, UserDTO.class); // Maybe change to responseEntity
+            UserDTO userDTO = restTemplate.getForObject(userServiceUrlWithUsername, UserDTO.class);
             if (jwtTokenUtil.validateToken(token, userDTO)) {
                 return ResponseEntity.ok(true);  // Token is valid
             }
+            
+            
         }
+        */
 
         // If token is not valid
         return ResponseEntity.ok(false);

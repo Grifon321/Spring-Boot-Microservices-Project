@@ -3,6 +3,7 @@ package com.example.user_service.service;
 import com.example.user_service.model.User;
 import com.example.user_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class UserService {
     public User updateUser(Long id, User updatedUser) {
         User user = getUserById(id);
         user.setUsername(updatedUser.getUsername());
-        user.setUsername(updatedUser.getEmail());
+        user.setEmail(updatedUser.getEmail());
         user.setPassword(updatedUser.getPassword());
         return userRepository.save(user);
     }
@@ -42,6 +43,10 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    public void deleteUserById(Long id) {
+        User user = getUserById(id);
+        userRepository.delete(user);
+    }
     
 
     public List<User> getAllUsers() {

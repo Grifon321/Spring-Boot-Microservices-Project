@@ -25,6 +25,7 @@ public class TaskConsumer {
             TaskMessage taskMessage = objectMapper.readValue(messageJSON, TaskMessage.class);
             String operation = taskMessage.getOperation();
             Task task = taskMessage.getTask();
+            System.out.println("Task recieved from Kafka topic: " + messageJSON);
 
             switch (operation) {
                 case "CREATE":
@@ -42,7 +43,6 @@ public class TaskConsumer {
                 default:
                     break;
             }
-            System.out.println("Task recieved from Kafka topic: " + messageJSON);
         } catch (Exception e) {
             System.out.println("Task could not be recieved from Kafka");
             e.printStackTrace();

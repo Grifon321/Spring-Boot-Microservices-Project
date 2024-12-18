@@ -24,49 +24,56 @@ Make sure PostgreSQL is running.
    ```bash
    mvn spring-boot:run
    ```
-   
+
 ## API Endpoints
-- POST /users/register: Register a new user.
-- PUT /users/{id}: Update the profile of a user by their ID.
-- GET /users: Retrieve a list of all users.
-- GET /users/{id}: Retrieve details of a user by their ID.
-- GET /users/username/{username}: Retrieve details of a user by their Username.
+- **POST /users**: Register a new user.
+- **GET /users**: Retrieve a list of all users.
+- **DELETE /users/{id}**: Delete the user by their `id`.
+- **GET /users/{id}**: Retrieve details of a user by their `id`.
+- **PUT /users/{id}**: Update the user by their `id`.
+- **GET /users/password/{username}**: Retrieve the password of a user by their `username`.
+- **GET /users/id-by-username/{username}**: Retrieve the id of a user by their `username`.
 
 ## Examples
-### POST /users/register
+### POST /users
 ```
 POST http://localhost:8082/users/register
 ```
 with the following JSON body :
-```
+```json
 {
     "username" : "FirstUser",
-    "password" : "some password",
+    "password" : "Some password",
     "email" : "email"
 }
 ```
-### PUT /users/{id}
-Notice : make sure user with the id 1 exists
+### GET /users
 ```
-PUT http://localhost:8082/users/1
+GET http://localhost:8082/users
 ```
-with the following JSON body :
+### DELETE /users/{id}
 ```
-   "username": "changedUsername",
-   "password" : "securePassword",
-   "email" : "randomeMail@mgail.com"
+DELETE http://localhost:8082/users/1
 ```
-### GET /users/showAll
-```
-GET http://localhost:8082/users/showAll
-```
-
 ### GET /users/{id}
 ```
 GET http://localhost:8082/users/1
 ```
-
-### GET /users/username/{username}
+### PUT /users/{id}
 ```
-GET http://localhost:8082/users/username/changedUsername
+PUT http://localhost:8082/users/1
+```
+with the following JSON body :
+```json
+   "username" : "changedUsername",
+   "password" : "securePassword",
+   "email" : "randomeMail@mail.com"
+```
+### GET /users/password/{id}
+```
+GET http://localhost:8082/users/password/1
+```
+### GET /users/id-by-username/{id}
+```
+GET http://localhost:8082/users/id-by-username/changedUsername
 ```

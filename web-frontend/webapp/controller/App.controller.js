@@ -41,14 +41,20 @@ sap.ui.define([
             })
             .then(response => {
                 if (response.ok) {
-                    MessageToast.show("Signup succeeded.");
+                    MessageToast.show("Signup successful for " + sUsername + "!");
                     return response.json();
+                } else if (response.status === 400) {
+                    MessageToast.show("Bad Request: Username or password missing.");
+                    return null;
+                } else if (response.status === 401) {
+                    MessageToast.show("Unauthorized: Invalid credentials.");
+                    return null;
                 } else {
-                    MessageToast.show("Signup failed. Please try again.");
+                    MessageToast.show("An unknown error occurred. Please try again.");
+                    return null;
                 }
             })
             .catch(error => {
-                MessageToast.show("Error signing up user.");
                 console.error("Error:", error);
             });
         },
@@ -82,11 +88,20 @@ sap.ui.define([
             .then(response => {
                 if (response.ok) {
                     return response.json(); // Parse JSON response for the token
+                } else if (response.status === 400) {
+                    MessageToast.show("Bad Request: Username or password missing.");
+                    return null;
+                } else if (response.status === 401) {
+                    MessageToast.show("Unauthorized: Invalid credentials.");
+                    return null;
                 } else {
-                    MessageToast.show("Login failed. Please try again.");
+                    MessageToast.show("An unknown error occurred. Please try again.");
+                    return null;
                 }
             })
             .then(data => {
+                if (!data) return;
+
                 if (data.token) {
                     // Store the token in sessionStorage
                     sessionStorage.setItem("authToken", data.token);
@@ -126,7 +141,6 @@ sap.ui.define([
                 }
             })
             .catch(error => {
-                MessageToast.show("Error logging user.");
                 console.error("Error:", error);
             });
 
@@ -241,17 +255,19 @@ sap.ui.define([
                     },
                     body: JSON.stringify(oData)
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        MessageToast.show("Task added successfully");
+                .then(response => {
+                    if (response.status === 201) {
+                        MessageToast.show("Task added successfully.");
                         this.onShowTasks();
+                    } else if (response.status === 400) {
+                        MessageToast.show("Bad Request: Username or password missing.");
+                        return null;
                     } else {
-                        MessageToast.show("Task added unsuccessfully");
+                        MessageToast.show("An unknown error occurred. Please try again.");
+                        return null;
                     }
                 })
                 .catch(error => {
-                    MessageToast.show("Error adding data");
                     console.error("Error:", error);
                 });
 
@@ -296,9 +312,7 @@ sap.ui.define([
                 }
             })
             .then(data => {
-                //var oModel = this.getView().getModel();
                 var oModel = sap.ui.getCore().getModel();
-                
                 oModel.setProperty("/tasks", data);
             })
             .catch(error => {
@@ -350,23 +364,28 @@ sap.ui.define([
 
                 // Send data to the backend API using fetch()
                 fetch("http://localhost:8089/api/deleteTask", {
-                    method: "POST",
+                    method: "DELETE",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify(oData)
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+                .then(response =>  {
+                    if (response.status === 204) {
                         MessageToast.show("Task deleted successfully");
                         this.onShowTasks();
+                    } else if (response.status === 400) {
+                        MessageToast.show("Bad Request.");
+                        return null;
+                    } else if (response.status === 401) {
+                        MessageToast.show("Unauthorized: Invalid credentials.");
+                        return null;
                     } else {
-                        MessageToast.show("Task deleted unsuccessfully");
+                        MessageToast.show("An unknown error occurred. Please try again.");
+                        return null;
                     }
                 })
                 .catch(error => {
-                    MessageToast.show("Error adding data");
                     console.error("Error:", error);
                 });
             } else {
@@ -408,23 +427,25 @@ sap.ui.define([
 
                 // Send data to the backend API using fetch()
                 fetch("http://localhost:8089/api/editTask", {
-                    method: "POST",
+                    method: "PUT",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify(oData)
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+                .then(response => {
+                    if (response.status === 200) {
                         MessageToast.show("Task moved successfully");
                         this.onShowTasks();
+                    } else if (response.status === 400) {
+                        MessageToast.show("Bad Request: Username or password missing.");
+                    } else if (response.status === 401) {
+                        MessageToast.show("Unauthorized: Invalid credentials.");
                     } else {
-                        MessageToast.show("Task moved unsuccessfully");
+                        MessageToast.show("An unknown error occurred. Please try again.");
                     }
                 })
                 .catch(error => {
-                    MessageToast.show("Error moving task");
                     console.error("Error:", error);
                 });
             } else {
@@ -506,23 +527,25 @@ sap.ui.define([
         
                 // Send data to the backend API using fetch()
                 fetch("http://localhost:8089/api/editTask", {
-                    method: "POST",
+                    method: "PUT",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify(oData)
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        MessageToast.show("Task updated successfully");
-                        this.onShowTasks();  // Reload the task list or update the UI
+                .then(response => {
+                    if (response.status === 200) {
+                        MessageToast.show("Task moved successfully");
+                        this.onShowTasks();
+                    } else if (response.status === 400) {
+                        MessageToast.show("Bad Request: Username or password missing.");
+                    } else if (response.status === 401) {
+                        MessageToast.show("Unauthorized: Invalid credentials.");
                     } else {
-                        MessageToast.show("Task update failed");
+                        MessageToast.show("An unknown error occurred. Please try again.");
                     }
                 })
                 .catch(error => {
-                    MessageToast.show("Error updating task");
                     console.error("Error:", error);
                 });
             } else {
@@ -607,23 +630,25 @@ sap.ui.define([
 
                 // Send data to the backend API using fetch()
                 fetch("http://localhost:8089/api/" + requestPath, {
-                    method: "PUT",
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify(oData)
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        MessageToast.show("Operation successfull");
-                        this.onShowTasks();  
+                .then(response => {
+                    if (response.status === 200) {
+                        MessageToast.show("Task edited successfully");
+                        this.onShowTasks();
+                    } else if (response.status === 400) {
+                        MessageToast.show("Bad Request: Username or password missing.");
+                    } else if (response.status === 401) {
+                        MessageToast.show("Unauthorized: Invalid credentials.");
                     } else {
-                        MessageToast.show("Operation failed");
+                        MessageToast.show("An unknown error occurred. Please try again.");
                     }
                 })
                 .catch(error => {
-                    MessageToast.show("Error updating user id");
                     console.error("Error:", error);
                 });
             } else {

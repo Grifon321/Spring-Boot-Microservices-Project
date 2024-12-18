@@ -1,7 +1,9 @@
 package com.example.authentication_service.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 import lombok.Data;
 
@@ -17,5 +19,10 @@ public class JWTConfig {
     
     @Value("${user-service-adress}")
     private String userServiceAdress;
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 
 }

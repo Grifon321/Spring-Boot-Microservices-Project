@@ -25,62 +25,78 @@ Make sure Kafka and PostgreSQL are running.
    ```
 
 ## API Endpoints
-- POST /tasks/register: Register a new task.
-- DELETE /tasks/{id} : Delete the task with the ID.
-- PUT /tasks/{id}: Update the task by their ID.
-- GET /tasks/showAll: Retrieve a list of all users.
-- GET /tasks/{id}: Retrieve details of a task by their ID.
-- PUT /tasks/addUserId/{id}?userId={userId}: Add the userID of a task with the ID.
-- PUT /tasks/removeUserId/{id}?userId={userId}: Remove the userID of a task with the ID.
-- GET /tasks/user/{userId}: Retrieve all tasks associated with userID.
+- **POST /tasks**: Register a new task.
+- **DELETE /tasks/{id}**: Delete the task with the specified `id`.
+- **PUT /tasks/{id}**: Update the task by its `id`.
+- **GET /tasks**: Retrieve a list of all tasks.
+- **GET /tasks/{id}**: Retrieve details of a task by its `id`.
+- **PATCH /tasks/{id}?**: Update a task with the given `id`. You can modify one or more of the following attributes by passing them in the query string (concatenated by `&`):
+  - `userId={userId}&action={action}`: Add or remove the user ID from the task. 
+    - `action` can be either `add` or `remove`.
+  - `name={name}`: Change the name of the task.
+  - `text={text}`: Change the text of the task.
+  - `deadline={deadline}`: Change the deadline of the task.
+  - `status={status}`: Change the status of the task. 
+    - Valid status values: `"To Do"`, `"In Progress"`, `"Done"`.
+- **GET /tasks/user/{userId}**: Retrieve all tasks associated with `userID`.
+
 
 ## Examples
-### POST /tasks/register
+### POST /tasks
 ```
-POST http://localhost:8084/tasks/register
+POST http://localhost:8084/tasks
 ```
-with the following JSON body :
-```
+with following JSON body 
+```json
 {
-    "name" : "testname",
-    "text" : "Some weird very very very very very very long text",
-    "deadline" : "tomorrow"
+    "name": "First task",
+    "text": "Some text",
+    "deadline": "today",
+    "status": "To Do",
+    "userIds": [
+        1
+    ]
 }
 ```
 ### DELETE /tasks/{id}
 ```
-POST http://localhost:8084/tasks/5
+http://localhost:8084/tasks/11
 ```
 ### PUT /tasks/{id}
-Notice : make sure user with the id 1 exists
 ```
-PUT http://localhost:8084/tasks/1
+http://localhost:8084/tasks/10
 ```
-with the following JSON body :
-```
+with following JSON body
+```json
 {
-    "name" : "testname",
-    "text" : "Some smaller text",
-    "deadline" : "today"
+    "name": "Some new name",
+    "text": "Some new text",
+    "deadline": null,
+    "status": "In Progress",
+    "userIds": [
+        2
+    ]
 }
 ```
-### GET /tasks/showAll
+### GET /tasks
 ```
-GET http://localhost:8084/tasks/showAll
+GET http://localhost:8084/tasks
 ```
 ### GET /tasks/{id}
 ```
-GET http://localhost:8084/tasks/1
+GET http://localhost:8084/tasks/10
 ```
-### PUT /tasks/addUserId/{id}?userId={userId}
+### PATCH /tasks/{taskId}?
 ```
-PUT http://localhost:8084/tasks/addUserId/1/2
+PATCH http://localhost:8084/tasks/1?userId=3&action=add
 ```
-### PUT /tasks/removeUserId/{id}?userId={userId}
 ```
-PUT http://localhost:8084/tasks/removeUserId/1?userId=2
+PATCH http://localhost:8084/tasks/1?userId=3&action=remove
+```
+```
+PATCH http://localhost:8084/tasks/1?status=To Do&name=New Name
 ```
 ### GET /tasks/user/{userId}
 ```
-GET http://localhost:8084/tasks/user/1
+GET http://localhost:8084/tasks/user/3
 ```

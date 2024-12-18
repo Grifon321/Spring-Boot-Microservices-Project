@@ -12,7 +12,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 import com.example.web.model.Task;
-import com.example.web.model.User;
 
 @Service
 public class ApiService {
@@ -22,12 +21,14 @@ public class ApiService {
     @Value("${api.gateway.url}")
     private String apiGatewayUrl;
 
+    
     public ApiService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
+    
 
     public String signup(String username, String password, String email) {
-        String url = apiGatewayUrl + "/users/register";
+        String url = apiGatewayUrl + "/users";
         String requestPayload = "{\"username\":\"" + username + "\",\"password\":\"" + password + "\",\"email\":\"" + email + "\"}";
 
         HttpHeaders headers = new HttpHeaders();
@@ -53,21 +54,21 @@ public class ApiService {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        return restTemplate.postForObject(url, entity, String.class);
+        
+        return restTemplate.exchange(url, HttpMethod.GET, entity, String.class).getBody();
     }
 
     public Long getUserId(String token, String username) {
-        String url = apiGatewayUrl + "/users/username/" + username;
+        String url = apiGatewayUrl + "/users/id-by-username/" + username;
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        User user = restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<User>() {}).getBody();
-        return user.id;
+        Long id = restTemplate.exchange(url, HttpMethod.GET, entity, Long.class).getBody();
+        return id;
     }
     
     public List<Task> getAllTasksByUsername(String token, String username) {
         Long userId = getUserId(token, username);
-        
         String url = apiGatewayUrl + "/tasks/user/" + userId;
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);
@@ -89,7 +90,7 @@ public class ApiService {
         Long userId = getUserId(token, username);
         String requestPayload = "{\"name\":\"" + name + "\",\"text\":\"" + text + "\",\"deadline\":\"" + deadline + "\",\"status\":\"" + status +  "\",\"userIds\":[" + userId +"]}";
 
-        String url = apiGatewayUrl + "/tasks/register";
+        String url = apiGatewayUrl + "/tasks";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -128,20 +129,20 @@ public class ApiService {
     }
 
     public void addUserId(Long id, Long userId, String token) {
-        String url = apiGatewayUrl + "/tasks/addUserId/" + id + "?userId=" + userId;
+        String url = apiGatewayUrl + "/tasks/" + id + "?userId=" + userId + "&action=" + "add";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        restTemplate.exchange(url, HttpMethod.PUT, entity, new ParameterizedTypeReference<Task>() {});
+        restTemplate.exchange(url, HttpMethod.PATCH, entity, new ParameterizedTypeReference<Task>() {});
     }
 
     public void removeUserId(Long id, Long userId, String token) {
-        String url = apiGatewayUrl + "/tasks/removeUserId/" + id + "?userId=" + userId;
+        String url = apiGatewayUrl + "/tasks/" + id + "?userId=" + userId + "&action=" + "remove";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        restTemplate.exchange(url, HttpMethod.PUT, entity, new ParameterizedTypeReference<Task>() {});
+        restTemplate.exchange(url, HttpMethod.PATCH, entity, new ParameterizedTypeReference<Task>() {});
     }
 }

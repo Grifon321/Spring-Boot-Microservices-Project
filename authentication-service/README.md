@@ -31,8 +31,8 @@ Make sure user-service is running.
    ```
 
 ## API Endpoints
-- POST /auth/authenticate: Authenticates the user and provides JWT bearer token.
-- POST /auth/validate: Validates the user.
+- POST /auth/authenticate: Authenticate the user and provides JWT bearer token.
+- GET /auth/validate: Validate the user.
 
 ## Examples
 ### POST /auth/authenticate
@@ -47,9 +47,9 @@ with the following JSON body :
 }
 ```
 It will send back the jwt_tocken back.
-### POST /auth/validate
+### GET /auth/validate
 ```
-POST http://localhost:8083/auth/validate
+GET http://localhost:8083/auth/validate
 ```
 with the following headers :
 ```

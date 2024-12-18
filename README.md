@@ -62,28 +62,38 @@ All the respective examples of the usage can be found in the README files of the
   </tr>
   <tr>
       <td>POST</td>
-      <td>/users/register</td>
-      <td>Register for User</td>
+      <td>/users</td>
+      <td>Register a new user</td>
+  </tr>
+  <tr>
+      <td>GET</td>
+      <td>/users</td>
+      <td>Retrieve a list of all users</td>
+  </tr>
+  <tr>
+      <td>DELETE</td>
+      <td>/users/{id}</td>
+      <td>Delete the user by their `id`</td>
+  </tr>
+  <tr>
+      <td>GET</td>
+      <td>/users/{id}</td>
+      <td>Retrieve details of a user by their `id`</td>
   </tr>
   <tr>
       <td>PUT</td>
       <td>/users/{id}</td>
-      <td>Update the user by {id}</td>
+      <td>Update the user by their `id`</td>
   </tr>
   <tr>
       <td>GET</td>
-      <td>/users/</td>
-      <td>Get a list of all users</td>
+      <td>/users/password/{username}</td>
+      <td>Retrieve the password of a user by their `username`</td>
   </tr>
   <tr>
       <td>GET</td>
-      <td>/users/{id}</td>
-      <td>Get details of the user by {id}</td>
-  </tr>
-  <tr>
-      <td>GET</td>
-      <td>/users/username/{username}</td>
-      <td>Get details of a user by {username}</td>
+      <td>/users/id-by-username/{username}</td>
+      <td>Retrieve the id of a user by their `username`</td>
   </tr>
 </table>
 
@@ -100,7 +110,7 @@ All the respective examples of the usage can be found in the README files of the
       <td>Authenticate the user and get JWT token</td>
   </tr>
   <tr>
-      <td>POST</td>
+      <td>GET</td>
       <td>/auth/validate</td>
       <td>Validate the user by JWT token</td>
   </tr>
@@ -115,43 +125,46 @@ All the respective examples of the usage can be found in the README files of the
   </tr>
   <tr>
       <td>POST</td>
-      <td>/tasks/register</td>
+      <td>/tasks</td>
       <td>Register a new task</td>
   </tr>
   <tr>
       <td>DELETE</td>
       <td>/tasks/{id}</td>
-      <td>Delete the task by {id}</td>
+      <td>Delete the task with the specified `id`</td>
   </tr>
   <tr>
       <td>PUT</td>
       <td>/tasks/{id}</td>
-      <td>Update the task by {id}</td>
+      <td>Update the task by its `id`</td>
   </tr>
   <tr>
       <td>GET</td>
-      <td>/tasks/showAll</td>
-      <td>Get a list of all tasks</td>
+      <td>/tasks</td>
+      <td>Retrieve a list of all tasks</td>
   </tr>
   <tr>
       <td>GET</td>
       <td>/tasks/{id}</td>
-      <td>Get the task by {id}</td>
+      <td>Retrieve details of a task by its `id`</td>
   </tr>
   <tr>
-      <td>PUT</td>
-      <td>/tasks/addUserId/{id}?userId={userId}</td>
-      <td>Add the userID to the task with {id}</td>
-  </tr>
-  <tr>
-      <td>PUT</td>
-      <td>/tasks/removeUserId/{id}?userId={userId}</td>
-      <td>Remove the userID to the task with {id}</td>
+      <td>PATCH</td>
+      <td>/tasks/{id}?</td>
+      <td>Update a task with the given `id`. You can modify one or more of the following attributes by passing them in the query string (concatenated by `&`):
+        <ul>
+          <li><strong>userId={userId}&action={action}</strong>: Add or remove the user ID from the task. `action` can be either `add` or `remove`.</li>
+          <li><strong>name={name}</strong>: Change the name of the task.</li>
+          <li><strong>text={text}</strong>: Change the text of the task.</li>
+          <li><strong>deadline={deadline}</strong>: Change the deadline of the task.</li>
+          <li><strong>status={status}</strong>: Change the status of the task. Valid status values: "To Do", "In Progress", "Done".</li>
+        </ul>
+      </td>
   </tr>
   <tr>
       <td>GET</td>
-      <td>/tasks/uesr/{id}</td>
-      <td>Get all the task assigned to the user with {id}</td>
+      <td>/tasks/user/{id}</td>
+      <td>Retrieve all tasks associated with `userID`</td>
   </tr>
 </table>
 
@@ -170,12 +183,12 @@ All the respective examples of the usage can be found in the README files of the
   <tr>
       <td>GET</td>
       <td>/elastic/search?query={query}</td>
-      <td>Retrieve a list of all tasks found by ES using query {query}</td>
+      <td>Retrieve a list of all tasks found by ES using query `query`</td>
   </tr>
   <tr>
       <td>GET</td>
       <td>/elastic/{userId}/search?query={query}</td>
-      <td>Retrieve a list of all tasks found by ES using query {query} of a user with {userID}</td>
+      <td>Retrieve a list of all tasks found by ES using query `query` of a user with `userID`</td>
   </tr>
 </table>
 

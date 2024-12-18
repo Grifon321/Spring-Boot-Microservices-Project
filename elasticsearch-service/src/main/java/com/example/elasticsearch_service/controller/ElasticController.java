@@ -17,19 +17,25 @@ public class ElasticController {
 
     @GetMapping("/showAll")
     public ResponseEntity<List<Task>> getAllTasks() {
+        // Send 200 responce with all tasks in body
         return ResponseEntity.ok(elasticService.findAll());
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<Task>> findByText(@RequestParam String query) {
+        // Perform a query and retrieve all tasks
         List<Task> tasks = elasticService.findByText(query);
+
+        // Send 200 responce with all tasks in body
         return ResponseEntity.ok(tasks);
     }
 
-    // " "can be encoded with "%20", "||" has to be encoded with "%7C%7C"
+    // " " can be encoded with "%20", "||" has to be encoded with "%7C%7C"
     @GetMapping("/{userId}/search")
     public ResponseEntity<List<Task>> findByTextAndUserID(@RequestParam String query, @PathVariable Long userId) {
+        // Perform a query and retrieve all tasks with a filter on userId
         List<Task> tasks = elasticService.findByTextAndUserID(query, userId);
+        // Send 200 responce with all tasks in body
         return ResponseEntity.ok(tasks);
     }
     
