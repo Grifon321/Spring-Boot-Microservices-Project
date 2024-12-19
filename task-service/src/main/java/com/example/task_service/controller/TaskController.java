@@ -23,8 +23,8 @@ public class TaskController {
     private TaskProducer taskProducer;
 
     @PostMapping
-    public ResponseEntity<?> createTask(@RequestBody Task task) {
-        // Validate the status of the task and send 400 responce if status is invalid
+    public ResponseEntity<Object> createTask(@RequestBody Task task) {
+        // Validate the status of the task and send 400 response if status is invalid
         if (!taskService.verifyStatus(task))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid status. Status has to be \"To Do\", \"In Progress\" or \"Done\".");
 
@@ -32,7 +32,7 @@ public class TaskController {
         Task createdTask = taskService.registerTask(task);
         taskProducer.sendTask(createdTask);
 
-        // Send 201 responce with task's location
+        // Send 201 response with task's location
          URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(createdTask.getId())
@@ -41,31 +41,31 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTaskById(@PathVariable Long id) {
-        // Delete task or send 404 responce if no task with the id
+    public ResponseEntity<Object> deleteTaskById(@PathVariable Long id) {
+        // Delete task or send 404 response if no task with the id
         Task task = taskService.getTaskById(id);
         if (task == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found.");
         taskProducer.deleteTask(task);
         taskService.deleteTaskById(id);
         
-        // Send 204 responce
+        // Send 204 response
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getTaskById(@PathVariable Long id) {
-        // Get task or send 404 responce
+    public ResponseEntity<Object> getTaskById(@PathVariable Long id) {
+        // Get task or send 404 response
         Task task = taskService.getTaskById(id);
         if (task == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found.");
         
-        // Send 200 responce with task in body
+        // Send 200 response with task in body
         return ResponseEntity.ok(task);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody Task task) {
+    public ResponseEntity<Object> updateTask(@PathVariable Long id, @RequestBody Task task) {
         // Validate the status of the task
         if (!taskService.verifyStatus(task))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid status. Status has to be \"To Do\", \"In Progress\" or \"Done\".");
@@ -74,19 +74,19 @@ public class TaskController {
         Task newTask = taskService.updateTask(id, task);
         taskProducer.updateTask(newTask);
 
-        // Send 200 responce with task in body
+        // Send 200 response with task in body
         return ResponseEntity.ok(newTask);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateUserId(@PathVariable Long id,
+    public ResponseEntity<Object> updateUserId(@PathVariable Long id,
                                             @RequestParam(required = false) Long userId, 
                                             @RequestParam(required = false) String action, 
                                             @RequestParam(required = false) String name, 
                                             @RequestParam(required = false) String text, 
                                             @RequestParam(required = false) String deadline, 
                                             @RequestParam(required = false) String status) {
-        // Get task or send 404 responce
+        // Get task or send 404 response
         Task task = taskService.getTaskById(id);
         if (task == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found.");
@@ -119,14 +119,14 @@ public class TaskController {
         }
         // Send the task to the Kafka producer
         taskProducer.updateTask(task);
-        // Send 200 responce with task in body
+        // Send 200 response with task in body
         return ResponseEntity.ok(task);
     }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Task>> getTasksByUserId(@PathVariable Long userId) {
         List<Task> tasks = taskService.getTasksByUserId(userId);
-        // Send 200 responce with tasks list in body
+        // Send 200 response with tasks list in body
         return ResponseEntity.ok(tasks);
     }
 

@@ -21,7 +21,7 @@ public class TaskConsumer {
     @KafkaListener(topics = "task-topic", groupId = "group_id")
     public void consume(String messageJSON) {
         try {
-            // Does not have to check for duplicates as elasticsearch already indirectly does it
+            // Process the tasks retrieved from kafka 
             TaskMessage taskMessage = objectMapper.readValue(messageJSON, TaskMessage.class);
             String operation = taskMessage.getOperation();
             Task task = taskMessage.getTask();
@@ -29,7 +29,7 @@ public class TaskConsumer {
 
             switch (operation) {
                 case "CREATE":
-                    elasticRepository.save(task);
+                    elasticRepository.save(task); // Does not have to check for duplicates as elasticsearch already does it
                     System.out.println("Task created in Elasticsearch: " + messageJSON);
                     break;
                 case "UPDATE":

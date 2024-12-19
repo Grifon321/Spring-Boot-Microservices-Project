@@ -3,8 +3,6 @@ package com.example.elasticsearch_service.service;
 import com.example.elasticsearch_service.model.Task;
 import com.example.elasticsearch_service.repository.ElasticRepository;
 
-import lombok.RequiredArgsConstructor;
-
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -24,14 +22,13 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class ElasticService {
 
     @Autowired
-    private final ElasticRepository elasticRepository;
+    private ElasticRepository elasticRepository;
     
     @Autowired
-    private final RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     @SuppressWarnings("deprecation")
     @Autowired

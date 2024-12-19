@@ -147,30 +147,30 @@ sap.ui.define([
         },
 
         onLogOff: function () {
-                    // Hide login page
-                    var oVbox = this.byId("login");
-                    if (oVbox)
-                        oVbox.setVisible(true);
+            // Hide login page
+            var oVbox = this.byId("login");
+            if (oVbox)
+                oVbox.setVisible(true);
 
-                    // Show contents
-                    var oVbox = this.byId("toDoContent");
-                    if (oVbox)
-                        oVbox.setVisible(false);
+            // Show contents
+            var oVbox = this.byId("toDoContent");
+            if (oVbox)
+                oVbox.setVisible(false);
 
-                    // Show log off button
-                    var oVBox = this.byId("logOffButton");
-                    if (oVBox)
-                        oVBox.setVisible(false);
+            // Show log off button
+            var oVBox = this.byId("logOffButton");
+            if (oVBox)
+                oVBox.setVisible(false);
 
-                    // Change title
-                    var oPage = this.byId("loginSignupPage");
-                    if (oPage)
-                        oPage.setTitle("Login/Signup to your account")
+            // Change title
+            var oPage = this.byId("loginSignupPage");
+            if (oPage)
+                oPage.setTitle("Login/Signup to your account")
 
-                    // Hide username in the header
-                    var oText = this.byId("usernameTextHeader");
-                    if (oText)
-                        oText.setVisible(false);
+            // Hide username in the header
+            var oText = this.byId("usernameTextHeader");
+            if (oText)
+                oText.setVisible(false);
 
             // Clear the data
             var oModel = sap.ui.getCore().getModel();
@@ -179,16 +179,16 @@ sap.ui.define([
 
         onShowTasks:  function () {
             // Prepare the data to send (username from session storage)
-            var username = sessionStorage.getItem("username");
-            var token = sessionStorage.getItem("authToken");
+            var sUsername = sessionStorage.getItem("username");
+            var sToken = sessionStorage.getItem("authToken");
             // Check if the username and authToken exist
-            if (!username || !token) {
+            if (!sUsername || !sToken) {
                 console.error("Missing username or auth token");
                 return;
             }
 
             // Retrieve data from the backend API using fetch()
-            fetch(`http://localhost:8089/api/content?username=${username}&token=${token}`, {
+            fetch(`http://localhost:8089/api/content?username=${sUsername}&token=${sToken}`, {
                 method: "GET"
             })
             .then(response => {
@@ -223,8 +223,8 @@ sap.ui.define([
 
         onAddTask: function () {
             // Load all the values
-            var username = sessionStorage.getItem("username");
-            var token = sessionStorage.getItem("authToken");
+            var sUsername = sessionStorage.getItem("username");
+            var sToken = sessionStorage.getItem("authToken");
 
             var oNameInput = this.byId("taskNameInput");
             var oTextInput = this.byId("taskTextInput");
@@ -236,11 +236,11 @@ sap.ui.define([
             var sDeadline = oDeadlineInput.getValue();
             
 
-            if (sName && sText && token && username) {
+            if (sName && sText && sToken && sUsername) {
                 // Prepare the data to send
                 var oData = {
-                    token: token,
-                    username: username,
+                    token: sToken,
+                    username: sUsername,
                     name: sName,
                     text: sText,
                     deadline: sDeadline,
@@ -280,28 +280,28 @@ sap.ui.define([
         
         onSearch:  function () {
             // Prepare the data to send (username from session storage)
-            var username = sessionStorage.getItem("username");
-            var token = sessionStorage.getItem("authToken");
+            var sUsername = sessionStorage.getItem("username");
+            var sToken = sessionStorage.getItem("authToken");
             
             var oSearchbar = this.byId("searchField");
-            var query = oSearchbar.getValue();
+            var sQuery = oSearchbar.getValue();
             
             // Prevents clearing table on empty search
-            if (!query) {
+            if (!sQuery) {
                 this.onShowTasks();
                 return;
             }
 
-            var transformedQuery = query.replace(/\|\|/g, "%7C%7C");
+            var sTransformedQuery = sQuery.replace(/\|\|/g, "%7C%7C");
 
             // Check if the username and authToken exist
-            if (!username || !token) {
+            if (!sUsername || !sToken) {
                 console.error("Missing username or auth token");
                 return;
             }
 
             // Retrieve data from the backend API using fetch()
-            fetch(`http://localhost:8089/api/search?username=${username}&token=${token}&query=${transformedQuery}`, {
+            fetch(`http://localhost:8089/api/search?username=${sUsername}&token=${sToken}&query=${sTransformedQuery}`, {
                 method: "GET"
             })
             .then(response => {
@@ -352,14 +352,14 @@ sap.ui.define([
 
             // Prepare the id and params
             var oData = oItem.getObject();
-            var id = oData.id;
-            var token = sessionStorage.getItem("authToken");
+            var nId = oData.id;
+            var sToken = sessionStorage.getItem("authToken");
 
-            if (token && id) {
+            if (sToken && nId) {
                 // Prepare the data to send
                 var oData = {
-                    token: token,
-                    id: id
+                    token: sToken,
+                    id: nId
                 };
 
                 // Send data to the backend API using fetch()
@@ -404,25 +404,25 @@ sap.ui.define([
             }
 
             // Prepare the id and params
-            var token = sessionStorage.getItem("authToken");
+            var sToken = sessionStorage.getItem("authToken");
             var oData = oItem.getObject();
-            var id = oData.id;
-            var name = oData.name;
-            var text = oData.text;
-            var deadline = oData.deadline;
-            var userIds = oData.userIds;
+            var nId = oData.id;
+            var sName = oData.name;
+            var sText = oData.text;
+            var sDeadline = oData.deadline;
+            var aUserIds = oData.userIds;
             
 
-            if (token && id) {
+            if (sToken && nId) {
                 // Prepare the data to send
                 var oData = {
-                    token: token,
-                    id: id,
-                    name: name,
-                    text: text,
-                    deadline: deadline,
+                    token: sToken,
+                    id: nId,
+                    name: sName,
+                    text: sText,
+                    deadline: sDeadline,
                     status: oStatus,
-                    userIds: userIds
+                    userIds: aUserIds
                 };
 
                 // Send data to the backend API using fetch()
@@ -476,14 +476,14 @@ sap.ui.define([
             }
         
             // Prepare the id and params
-            var token = sessionStorage.getItem("authToken");
+            var sToken = sessionStorage.getItem("authToken");
             var oData = oItem.getObject();
-            var id = oData.id;
-            var name = oData.name;
-            var text = oData.text;
-            var deadline = oData.deadline;
-            var status = oData.status;
-            var userIds = oData.userIds;
+            var nId = oData.id;
+            var sName = oData.name;
+            var sText = oData.text;
+            var sDeadline = oData.deadline;
+            var sStatus = oData.status;
+            var aUserIds = oData.userIds;
         
             // Open the dialog to change task details
             var oDialog = this.byId("editTask");
@@ -492,37 +492,37 @@ sap.ui.define([
                 this.getView().addDependent(oDialog);
             }
             // Preload the task's details
-            this.byId("editTaskNameInput").setValue(name);
-            this.byId("editTaskTextInput").setValue(text);
-            this.byId("editTaskDeadlineInput").setValue(deadline);
-            this.byId("editTaskStatusLabel").setText("Current status is: " + status);
+            this.byId("editTaskNameInput").setValue(sName);
+            this.byId("editTaskTextInput").setValue(sText);
+            this.byId("editTaskDeadlineInput").setValue(sDeadline);
+            this.byId("editTaskStatusLabel").setText("Current status is: " + sStatus);
             oDialog.open();
 
             // Store task id and userIds for later use
-            this._currentTaskId = id;
-            this._currentTaskUserIds = userIds;
+            this._currentTaskId = nId;
+            this._currentTaskUserIds = aUserIds;
         },
 
         onEditTaskDialog: function () {
             // Load all the values
-            var name = this.byId("editTaskNameInput").getValue();
-            var text = this.byId("editTaskTextInput").getValue();
-            var deadline = this.byId("editTaskDeadlineInput").getValue();
+            var sName = this.byId("editTaskNameInput").getValue();
+            var sText = this.byId("editTaskTextInput").getValue();
+            var sDeadline = this.byId("editTaskDeadlineInput").getValue();
             var oSelect = this.byId("editTaskStatusSelect");
-            var status = oSelect.getSelectedKey();
-            var id = this._currentTaskId;
-            var userIds = this._currentTaskUserIds;
-            var token = sessionStorage.getItem("authToken");
+            var sStatus = oSelect.getSelectedKey();
+            var nId = this._currentTaskId;
+            var aUserIds = this._currentTaskUserIds;
+            var sToken = sessionStorage.getItem("authToken");
         
-            if (token && id) {
+            if (sToken && nId) {
                 var oData = {
-                    token: token,
-                    id: id,
-                    name: name,
-                    text: text,
-                    deadline: deadline,
-                    status: status,
-                    userIds: userIds
+                    token: sToken,
+                    id: nId,
+                    name: sName,
+                    text: sText,
+                    deadline: sDeadline,
+                    status: sStatus,
+                    userIds: aUserIds
                 };
         
                 // Send data to the backend API using fetch()
@@ -572,8 +572,8 @@ sap.ui.define([
         
             // Prepare the id and params
             var oData = oItem.getObject();
-            var id = oData.id;
-            var userIds = oData.userIds;
+            var nId = oData.id;
+            var aUserIds = oData.userIds;
         
             // Open the dialog to change task details
             var oDialog = this.byId("updateUsers");
@@ -582,28 +582,28 @@ sap.ui.define([
                 this.getView().addDependent(oDialog);
             }
             // Preload the task's details
-            this.byId("updateUsersLabel").setText("Current users are: " + userIds);
+            this.byId("updateUsersLabel").setText("Current users are: " + aUserIds);
             oDialog.open();
 
             // Store task id and user ids for later use
-            this._currentTaskId = id;
+            this._currentTaskId = nId;
         },
 
         onUpdateUsersDialog: function () {
             // Load all the values
             var userId = this.byId("updateUsersInput").getValue().trim();
-            var transformedUserId = null;
-            var id = this._currentTaskId;
-            var token = sessionStorage.getItem("authToken");
+            var nTransformedUserId = null;
+            var nId = this._currentTaskId;
+            var sToken = sessionStorage.getItem("authToken");
             var oSelect = this.byId("updateUsersSelect");
-            var selectedKey = oSelect.getSelectedKey();
-            var requestPath = null;
+            var sSelectedKey = oSelect.getSelectedKey();
+            var sRequestPath = null;
             
             // Check operation
-            if (selectedKey == "add")
-                requestPath = "addUserId";
-            else if (selectedKey == "remove")
-                requestPath = "removeUserId";
+            if (sSelectedKey == "add")
+                sRequestPath = "addUserId";
+            else if (sSelectedKey == "remove")
+                sRequestPath = "removeUserId";
             else {
                 MessageToast.show("Select the operation please");
                 return;
@@ -611,25 +611,25 @@ sap.ui.define([
             
             // Check if user id is a number or transform
             if (!isNaN(userId)) {
-                transformedUserId = userId;
+                nTransformedUserId = userId;
             } else {
-                transformedUserId = parseInt(userId, 10);
-                if (isNaN(transformedUserId)) {
+                nTransformedUserId = parseInt(userId, 10);
+                if (isNaN(nTransformedUserId)) {
                     MessageToast.show("Invalid User ID, please enter a numeric value");
                     return;
                 }
             }
         
-            if (token && id && userId) {
+            if (sToken && nId && userId) {
                 // Prepare data
                 var oData = {
-                    token: token,
-                    id: id,
-                    userId: transformedUserId
+                    token: sToken,
+                    id: nId,
+                    userId: nTransformedUserId
                 };
 
                 // Send data to the backend API using fetch()
-                fetch("http://localhost:8089/api/" + requestPath, {
+                fetch("http://localhost:8089/api/" + sRequestPath, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

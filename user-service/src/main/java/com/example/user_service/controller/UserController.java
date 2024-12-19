@@ -19,9 +19,15 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        // Register the user
+    public ResponseEntity<Object> registerUser(@RequestBody User user) {
+        // 400 response if username consists only out of numbers
+        if (user.getUsername().matches("\\d+"))
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username can not consist of numbers only.");
+
+        // Register the user and 400 responce if username already exists
         User createdUser = userService.registerUser(user);
+        if (createdUser == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with the username already exists.");
 
         // Send 201 responce with user's location
          URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -32,19 +38,20 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Object> deleteUser(@PathVariable Long id) {
         // Delete the user or send 404 responce if no user with the id
         User user = userService.getUserById(id);
         if (user == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
-        userService.deleteUserById(id);
+        if (!userService.deleteUserById(id))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         
         // Send 204 responce
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}") // ToDo : Security flaw
-    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+    public ResponseEntity<Object> getUserById(@PathVariable Long id) {
         // Get the user or send 404 responce if no user with the id
         User user = userService.getUserById(id);
         if (user == null)
@@ -55,7 +62,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User newUser) {
+    public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody User newUser) {
         // Update the user or send 404 responce if no user with the id
         User user = userService.getUserById(id);
         if (user == null)
@@ -78,7 +85,7 @@ public class UserController {
     }
 
     @GetMapping("/id-by-username/{username}")
-    public ResponseEntity<?> getIdByUsername(@PathVariable String username) {
+    public ResponseEntity<Object> getIdByUsername(@PathVariable String username) {
         // Get the user and extract the id
         User user = userService.getUserByUsername(username);
         if (user == null)

@@ -6,7 +6,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 .mvn/wrapper/maven-wrapper.properties
 
-# IntelliJ IDEA files
+# Vscode
 .vscode
 
 # STS (Spring Tool Suite)

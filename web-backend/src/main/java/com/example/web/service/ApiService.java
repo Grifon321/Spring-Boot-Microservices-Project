@@ -1,5 +1,6 @@
 package com.example.web.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -16,16 +17,11 @@ import com.example.web.model.Task;
 @Service
 public class ApiService {
 
-    private final RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Value("${api.gateway.url}")
     private String apiGatewayUrl;
-
-    
-    public ApiService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-    
 
     public String signup(String username, String password, String email) {
         String url = apiGatewayUrl + "/users";
@@ -88,7 +84,9 @@ public class ApiService {
 
     public void createNewTask(String token, String username, String name, String text, String deadline, String status) {
         Long userId = getUserId(token, username);
-        String requestPayload = "{\"name\":\"" + name + "\",\"text\":\"" + text + "\",\"deadline\":\"" + deadline + "\",\"status\":\"" + status +  "\",\"userIds\":[" + userId +"]}";
+        String requestPayload = "{\"name\":\"" + name + "\",\"text\":\"" + text +
+                                "\",\"deadline\":\"" + deadline + "\",\"status\":\"" + status +
+                                "\",\"userIds\":[" + userId +"]}";
 
         String url = apiGatewayUrl + "/tasks";
         HttpHeaders headers = new HttpHeaders();
@@ -109,7 +107,9 @@ public class ApiService {
         }
         userIdsStringBuilder.append("]");
 
-        String requestPayload = "{\"name\":\"" + name + "\",\"text\":\"" + text + "\",\"deadline\":\"" + deadline + "\",\"status\":\"" + status + "\",\"userIds\":" + userIdsStringBuilder.toString() + "}";
+        String requestPayload = "{\"name\":\"" + name + "\",\"text\":\"" + text +
+                                "\",\"deadline\":\"" + deadline + "\",\"status\":\"" + status +
+                                "\",\"userIds\":" + userIdsStringBuilder.toString() + "}";
 
         String url = apiGatewayUrl + "/tasks/" + id;
         HttpHeaders headers = new HttpHeaders();

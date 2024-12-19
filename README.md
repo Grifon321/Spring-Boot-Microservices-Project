@@ -10,8 +10,8 @@ This projects is a demonstration of a micro service architecture which provides 
 - [API Endpoints](#api-endpoints)
 - [Examples](#examples)
 - [Installation](#installation)
-- [Usage](#usage)
-- [Usage for development](#usage-for-development)
+- [Usage](#usage-via-docker)
+- [Usage for development](#usage-via-maven)
 
 ## Stack
 - Maven
@@ -44,7 +44,6 @@ This projects is a demonstration of a micro service architecture which provides 
     * PostgreSQL
 * Kafka
 * Elasticsearch
-* Lombok
 * Docker
 
 ### Web component
@@ -196,7 +195,7 @@ All the respective examples of the usage can be found in the README files of the
 Let's say we want to create a new user, authenticate the user and create a task. Examples are done via Postman.
 ### 1. Creating the user
 ```
-POST http://localhost:8081/users/register
+POST http://localhost:8081/users
 ```
 with the following JSON body :
 ```
@@ -219,7 +218,7 @@ with the following JSON body :
 }
 ```
 The post request grants us a JWT Token, e.g. 
-`eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGaXJzdCBVc2VyIiwiaWF0IjoxNzI5NzA1Mzk5LCJleHAiOjE3Mjk3MDU5OTl9.tVMOSlcxK_yJFSRQXZ_J9zgja7vFVPAl3WJ8qQPS4YQ`
+`eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGaXJzdCBVc2VyIiwiaWF0IjoxNzM0NjI5Mjk2LCJleHAiOjE3MzQ2Mjk4OTZ9.xRVeiwHDFNNhE116dVjxB4FKXqcbrO_80In4cOz3MnM`
 ![Authentication](README-images/Authentication.png)
 ### 3. Creating a task 
 ```
@@ -227,19 +226,17 @@ POST http://localhost:8081/tasks/register
 ```
 with the following header :\
 `"key":"Authorization"`\
-`"value":"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGaXJzdCBVc2VyIiwiaWF0IjoxNzI5NzA1Mzk5LCJleHAiOjE3Mjk3MDU5OTl9.tVMOSlcxK_yJFSRQXZ_J9zgja7vFVPAl3WJ8qQPS4YQ"`
-![Authentication](README-images/Task%20creation%201.png)
+`"value":"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGaXJzdCBVc2VyIiwiaWF0IjoxNzM0NjI5Mjk2LCJleHAiOjE3MzQ2Mjk4OTZ9.xRVeiwHDFNNhE116dVjxB4FKXqcbrO_80In4cOz3MnM"`
 
 and with the following JSON body :
 ```
 {
-  "name": "First Task",
-  "text": "Here is a small description"
+  "name": "Some name",
+  "text": "Some text"
 }
 ```
-As the responce we get a confirmation as a Task Object in JSON:
-
-![Authentication](README-images/Task%20creation%202.png)
+As the responce we get a confirmation as a Task Object in JSON.
+![Authentication](README-images/Task%20creation.png)
 
 ## Installation
 - Make sure Apache Maven is installed on the machine to compile all the files and via `mvn clean install` in all of the maven project directories :

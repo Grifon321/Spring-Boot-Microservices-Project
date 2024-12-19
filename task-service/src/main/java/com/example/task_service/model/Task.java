@@ -4,11 +4,8 @@ import java.util.List;
 
 import jakarta.persistence.*;
 
-import lombok.Data;
-
 @Entity
 @Table(name="tasks")
-@Data
 public class Task {
 
     @Id
@@ -28,4 +25,53 @@ public class Task {
     @ElementCollection
     @Column(name = "user-ids")
     private List<Long> userIds;
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(String deadline) {
+        this.deadline = deadline;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public List<Long> getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(List<Long> userIds) {
+        this.userIds = userIds;
+    }
 }
