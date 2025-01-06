@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "main": "login.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "node replace-env-vars.js && ui5 serve --accept-remote-connections"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  }
 }

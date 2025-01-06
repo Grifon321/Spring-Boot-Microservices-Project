@@ -32,7 +32,7 @@ sap.ui.define([
             };
 
             // Send data to the backend API using fetch()
-            fetch("http://localhost:8089/api/signup", {
+            fetch(window._env.BACKEND_URL + "/api/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -78,7 +78,7 @@ sap.ui.define([
             };
 
             // Send data to the backend API using fetch()
-            fetch("http://localhost:8089/api/login", {
+            fetch(window._env.BACKEND_URL + "/api/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -188,7 +188,7 @@ sap.ui.define([
             }
 
             // Retrieve data from the backend API using fetch()
-            fetch(`http://localhost:8089/api/content?username=${sUsername}&token=${sToken}`, {
+            fetch(window._env.BACKEND_URL + `/api/content?username=${sUsername}&token=${sToken}`, {
                 method: "GET"
             })
             .then(response => {
@@ -248,7 +248,7 @@ sap.ui.define([
                 };
 
                 // Send data to the backend API using fetch()
-                fetch("http://localhost:8089/api/createTask", {
+                fetch(window._env.BACKEND_URL + "/api/createTask", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -301,7 +301,7 @@ sap.ui.define([
             }
 
             // Retrieve data from the backend API using fetch()
-            fetch(`http://localhost:8089/api/search?username=${sUsername}&token=${sToken}&query=${sTransformedQuery}`, {
+            fetch(window._env.BACKEND_URL + `/api/search?username=${sUsername}&token=${sToken}&query=${sTransformedQuery}`, {
                 method: "GET"
             })
             .then(response => {
@@ -363,7 +363,7 @@ sap.ui.define([
                 };
 
                 // Send data to the backend API using fetch()
-                fetch("http://localhost:8089/api/deleteTask", {
+                fetch(window._env.BACKEND_URL + "/api/deleteTask", {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json"
@@ -426,7 +426,7 @@ sap.ui.define([
                 };
 
                 // Send data to the backend API using fetch()
-                fetch("http://localhost:8089/api/editTask", {
+                fetch(window._env.BACKEND_URL + "/api/editTask", {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json"
@@ -526,7 +526,7 @@ sap.ui.define([
                 };
         
                 // Send data to the backend API using fetch()
-                fetch("http://localhost:8089/api/editTask", {
+                fetch(window._env.BACKEND_URL + "/api/editTask", {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json"
@@ -629,7 +629,7 @@ sap.ui.define([
                 };
 
                 // Send data to the backend API using fetch()
-                fetch("http://localhost:8089/api/" + sRequestPath, {
+                fetch(window._env.BACKEND_URL + "/api/" + sRequestPath, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

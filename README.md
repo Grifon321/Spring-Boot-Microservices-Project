@@ -12,6 +12,7 @@ This projects is a demonstration of a micro service architecture which provides 
 - [Installation](#installation)
 - [Usage](#usage-via-docker)
 - [Usage for development](#usage-via-maven)
+- [Next Steps](#next-steps)
 
 ## Stack
 - Maven
@@ -33,6 +34,7 @@ This projects is a demonstration of a micro service architecture which provides 
             * Authentication
             * Validation
         * Spring Web
+            * RESTful APIs
         * Spring Data
             * Spring Data JPA
             * PostgreSQL
@@ -243,22 +245,12 @@ As the responce we get a confirmation as a Task Object in JSON.
 user-service/, authentication-service/, elasticsearch-service/, eureka-server/, task-service/, web-backend/, api-gateway/
 - For web component make sure SAP UI5 with minimal version of 1.60 is installed.
 ## Usage (via docker)
-Make sure MAVEN is installed as well as docker client and then run docker :
+Estimated RAM needed 6~8gb via docker with Docker Desktop.
+Run docker :
 ```
 docker-compose up --build
 ```
-Docker does not include web. Web component has to be launched separately via :
-```
-cd web-backend
-mvn spring-boot:run
-```
-for backend and 
-```
-cd web-frontend/web
-ui5 serve
-```
-for frontend.
-The API-Gateway can be accessed on port 8081, the web can be accessed on port `localhost:8080/login.html`
+The API-Gateway can be accessed via `http://localhost:8081`, the web can be accessed via `http://localhost:8080/login.html`
 ## Usage (via maven)
 Make sure MAVEN is installed as well as docker client. Alternatively, PostgreSQL, Kafka and Elasticsearch can be launched manually instead of creating docker image.
 ### 1. PostgreSQL, Kafka, Elasticsearch
@@ -268,11 +260,26 @@ Make sure PostgreSQL is launched with following parameters on port 5432 with fol
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
 ```
-Kafka as well as zookeeper have to be running on ports 9092 and 2181 accordingly.
-Elasticsearch has to be running on port 9200.
+Apache Kafka has to be running on port `9092`.
+Elasticsearch has to be running on port `9200`.
 ### 2. Services
 - Make sure `mvn clean install` has been executed in all of the maven project directories and start each of the services via `mvn spring-boot:run`:
 user-service/, authentication-service/, elasticsearch-service/, eureka-server/, task-service/, web-backend/, api-gateway/
 - For elasticsearch-service make sure elastic search is running via sending POST request to `http://localhost:9200` before launching elasticsearch-service.
-- For web component launch it with `ui5 serve` from web-frontend/web/
-The API-Gateway can be accessed on port 8081, the web can be accessed on port `localhost:8080/login.html`
+- For web-frontend component dowload the dependencies via `npm install` from web-frontent folder and launch it with `npm run serve` or alternatively `ui5 serve` from `/web-frontend/`
+The API-Gateway can be accessed on port `http://localhost:8081`, the web can be accessed via `http://localhost:8080/login.html`
+
+## Next Steps
+In the future, following improvements can be considered :
+* Implementing health checks for services (e.g. `GET /health`) to monitor if they are up outside of Eureka
+* Logging
+* Changing dependencies in docker-compose from `depends_on` to `health_check`s to decreases ressources usage
+* Implementing Eureka caching in order to reduce overhead (may be redundant due to kubernetes later on)
+* Integrating with kubernetes
+* Adressing race conditions (DB and web)
+* Expanding functionality :
+    * % of task done 
+    * Show deadline and other infos
+    * Elasticsearch filters (e.g. date, users assigned to task), paging, sorting
+    * Autorization
+    * Tasks Drag & Drop

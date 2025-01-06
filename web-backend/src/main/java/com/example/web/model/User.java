@@ -1,5 +1,6 @@
 package com.example.web.model;
 
+@SuppressWarnings("unused")
 public class User {
     public Long id;
     private String username;

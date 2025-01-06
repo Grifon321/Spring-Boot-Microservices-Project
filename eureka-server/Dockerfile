@@ -1,6 +1,13 @@
-# Run
-FROM openjdk:17-jdk-slim
+# Build stage
+FROM maven:3.8.3-openjdk-17 AS build
 WORKDIR /app
-COPY target/eureka-server-0.0.1-SNAPSHOT.jar /app/eureka-server.jar
-EXPOSE 8083
+COPY pom.xml /app/
+COPY src /app/src/
+RUN mvn clean install -DskipTests
+
+# Runtime stage
+FROM azul/zulu-openjdk-alpine:17-latest
+WORKDIR /app
+COPY --from=build /app/target/eureka-server-0.0.1-SNAPSHOT.jar /app/eureka-server.jar
+EXPOSE 8761
 ENTRYPOINT ["java", "-jar", "eureka-server.jar"]
